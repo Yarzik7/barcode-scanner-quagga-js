@@ -4,42 +4,61 @@ import "./App.css";
 
 function App() {
   const [barcode, setBarcode] = useState("");
-  const [error, setError] = useState(null);
-  const [devices, setDevices] = useState([]);
+  // const [error, setError] = useState(null);
+  // const [devices, setDevices] = useState([]);
 
   const cameraScannerRef = useRef();
 
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then(setDevices);
-    Quagga.init(
-      {
-        inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          target: document.querySelector("#scanner-container"),
-          constraints: {
-            width: 640,
-            height: 480,
-            facingMode: "environment", // вибір тилової камери
-          },
-        },
-        decoder: {
-          readers: ["ean_reader", "upc_reader"],
-        },
-      },
-      function (err) {
-        if (err) {
-          // console.error("Помилка ініціалізації Quagga: ", err);
-          setError(err);
-          return;
+    // Отримати список доступних пристроїв
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        // Знайти камеру за допомогою фільтрації за kind і label
+        const videoDevices = devices.filter(
+          (device) => device.kind === "videoinput"
+        );
+
+        if (videoDevices.length > 0) {
+          // Використовуємо ідентифікатор першої знайденої камери
+          const deviceId = videoDevices[4].deviceId;
+
+          // Ініціалізуємо QuaggaJS з вказаною камерою
+          Quagga.init(
+            {
+              inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector("#scanner-container"),
+                constraints: {
+                  width: 640,
+                  height: 480,
+                  facingMode: "environment", // вибір тилової камери
+                  deviceId: deviceId, // вибір конкретної камери за ідентифікатором
+                },
+              },
+              decoder: {
+                readers: ["ean_reader", "upc_reader"],
+              },
+            },
+            function (err) {
+              if (err) {
+                console.error("Помилка ініціалізації Quagga: ", err);
+                return;
+              }
+              Quagga.start();
+            }
+          );
+        } else {
+          console.error("Немає доступних камер");
         }
-        Quagga.start();
-      }
-    );
+      })
+      .catch((error) => {
+        console.error("Помилка отримання доступу до камер: ", error);
+      });
 
     Quagga.onDetected((result) => {
       // Обробка знайденого штрихкоду
-      // console.log("Знайдено штрихкод:", result.codeResult.code);
       setBarcode(result.codeResult.code);
     });
 
@@ -58,12 +77,12 @@ function App() {
       >
         {/* Відображення відеопотоку з камери */}
       </div>
-      {error && <p className="errorMessage">{JSON.stringify(error)}</p>}
-      <ul className="devicesList">
+      {/* {error && <p className="errorMessage">{JSON.stringify(error)}</p>} */}
+      {/* <ul className="devicesList">
         {devices.map(({ label }) => (
           <li>{label}</li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
