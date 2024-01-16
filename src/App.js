@@ -5,10 +5,12 @@ import "./App.css";
 function App() {
   const [barcode, setBarcode] = useState("");
   const [error, setError] = useState(null);
+  const [devices, setDevices] = useState([]);
 
   const cameraScannerRef = useRef();
 
   useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then(setDevices);
     Quagga.init(
       {
         inputStream: {
@@ -57,6 +59,11 @@ function App() {
         {/* Відображення відеопотоку з камери */}
       </div>
       {error && <p className="errorMessage">{JSON.stringify(error)}</p>}
+      <ul className="devicesList">
+        {devices.map(({ label }) => (
+          <li>{label}</li>
+        ))}
+      </ul>
     </div>
   );
 }

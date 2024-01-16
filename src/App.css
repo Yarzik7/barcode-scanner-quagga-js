@@ -22,3 +22,10 @@
   margin-top: 20px;
   text-align: center;
 }
+
+.devicesList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
