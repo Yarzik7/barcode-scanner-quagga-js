@@ -50,7 +50,8 @@ function App() {
     <div className="container">
       <p className="barcode">{barcode}</p>
       <Scanner />
-      
+      <ul className="barcode-list"></ul>
+
       {/* {error && <p className="errorMessage">{JSON.stringify(error)}</p>}
       <ul className="devicesList">
         {devices.map(({ label }) => (
