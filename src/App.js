@@ -5,7 +5,7 @@ import BarcodeItem from "./BarcodeItem/BarcodeItem";
 import "./App.css";
 
 function App() {
-  const [barcode, setBarcode] = useState("");
+  // const [barcode, setBarcode] = useState("");
   // const [error, setError] = useState(null);
   // const [devices, setDevices] = useState([]);
   const [barcodeList, setBarcodeList] = useState([]);
