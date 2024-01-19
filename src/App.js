@@ -7,14 +7,19 @@ import "./App.css";
 function App() {
   // const [barcode, setBarcode] = useState("");
   // const [error, setError] = useState(null);
-  // const [devices, setDevices] = useState([]);
+  const [devices, setDevices] = useState([]);
   const [barcodeList, setBarcodeList] = useState([]);
+  console.log(devices);
 
   const addBarcode = (newBarcode) =>
     setBarcodeList((prevState) => [...prevState, newBarcode]);
 
   useEffect(() => {
-    // navigator.mediaDevices.enumerateDevices().then(setDevices);
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) =>
+        setDevices(devices.filter(({ kind }) => kind === "videoinput"))
+      );
     Quagga.init(
       {
         inputStream: {
@@ -25,6 +30,7 @@ function App() {
             width: 640,
             height: 480,
             facingMode: "environment", // вибір тилової камери
+            deviceId: "",
           },
           area: {
             top: "0%",
@@ -64,6 +70,11 @@ function App() {
       <ul className="barcode-list">
         {barcodeList.map((barcode, idx) => (
           <BarcodeItem key={idx}>{barcode}</BarcodeItem>
+        ))}
+      </ul>
+      <ul className="barcode-list">
+        {devices.map((device, idx) => (
+          <BarcodeItem key={idx}>{device.deviceId}</BarcodeItem>
         ))}
       </ul>
     </div>
