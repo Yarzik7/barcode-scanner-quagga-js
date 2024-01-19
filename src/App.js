@@ -30,7 +30,7 @@ function App() {
             width: 640,
             height: 480,
             facingMode: "environment", // вибір тилової камери
-            deviceId: "",
+            deviceId: devices[3] ?? "",
           },
           area: {
             top: "0%",
