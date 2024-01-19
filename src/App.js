@@ -74,7 +74,7 @@ function App() {
       </ul>
       <ul className="barcode-list" style={{ display: "block" }}>
         {devices.map((device, idx) => (
-          <BarcodeItem key={idx}>{device.label}</BarcodeItem>
+          <BarcodeItem key={idx}>{device.deviceId}</BarcodeItem>
         ))}
       </ul>
     </div>
