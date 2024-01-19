@@ -1,12 +1,17 @@
 import Quagga from "quagga";
 import { useEffect, useState } from "react";
 import Scanner from "./Scanner/Scanner";
+import BarcodeItem from "./BarcodeItem/BarcodeItem";
 import "./App.css";
 
 function App() {
   const [barcode, setBarcode] = useState("");
   // const [error, setError] = useState(null);
   // const [devices, setDevices] = useState([]);
+  const [barcodeList, setBarcodeList] = useState([]);
+
+  const addBarcode = (newBarcode) =>
+    setBarcodeList((prevState) => [...prevState, newBarcode]);
 
   useEffect(() => {
     // navigator.mediaDevices.enumerateDevices().then(setDevices);
@@ -17,9 +22,15 @@ function App() {
           type: "LiveStream",
           target: document.querySelector("#scanner-container"),
           constraints: {
-            width: 400,
-            height: 200,
+            width: 640,
+            height: 480,
             facingMode: "environment", // вибір тилової камери
+          },
+          area: {
+            top: "0%",
+            right: "0%",
+            left: "0%",
+            bottom: "0%",
           },
         },
         decoder: {
@@ -38,7 +49,8 @@ function App() {
 
     Quagga.onDetected((result) => {
       // Обробка знайденого штрихкоду
-      setBarcode(result.codeResult.code);
+      // setBarcode(result.codeResult.code);
+      addBarcode(result.codeResult.code);
     });
 
     return () => {
@@ -48,16 +60,12 @@ function App() {
 
   return (
     <div className="container">
-      <p className="barcode">{barcode}</p>
       <Scanner />
-      <ul className="barcode-list"></ul>
-
-      {/* {error && <p className="errorMessage">{JSON.stringify(error)}</p>}
-      <ul className="devicesList">
-        {devices.map(({ label }) => (
-          <li>{label}</li>
+      <ul className="barcode-list">
+        {barcodeList.map((barcode, idx) => (
+          <BarcodeItem key={idx}>{barcode}</BarcodeItem>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 }
