@@ -9,7 +9,6 @@ function App() {
   // const [error, setError] = useState(null);
   const [devices, setDevices] = useState([]);
   const [barcodeList, setBarcodeList] = useState([]);
-  console.log(devices);
 
   const addBarcode = (newBarcode) =>
     setBarcodeList((prevState) => [...prevState, newBarcode]);
@@ -71,11 +70,6 @@ function App() {
       <ul className="barcode-list">
         {barcodeList.map((barcode, idx) => (
           <BarcodeItem key={idx}>{barcode}</BarcodeItem>
-        ))}
-      </ul>
-      <ul className="barcode-list" style={{ display: "block" }}>
-        {devices.map((device, idx) => (
-          <BarcodeItem key={idx}>{device.deviceId}</BarcodeItem>
         ))}
       </ul>
     </div>
