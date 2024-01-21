@@ -6,19 +6,19 @@ import "./App.css";
 
 function App() {
   // const [barcode, setBarcode] = useState("");
-  // const [error, setError] = useState(null);
-  const [devices, setDevices] = useState([]);
+  // const [devices, setDevices] = useState([]);
   const [barcodeList, setBarcodeList] = useState([]);
 
   const addBarcode = (newBarcode) =>
     setBarcodeList((prevState) => [...prevState, newBarcode]);
 
   useEffect(() => {
-    navigator.mediaDevices
-      .enumerateDevices()
-      .then((devices) =>
-        setDevices(devices.filter(({ kind }) => kind === "videoinput"))
-      );
+    // navigator.mediaDevices
+    //   .enumerateDevices()
+    //   .then((devices) =>
+    //     setDevices(devices.filter(({ kind }) => kind === "videoinput"))
+    //   );
+
     Quagga.init(
       {
         inputStream: {
@@ -30,7 +30,7 @@ function App() {
             height: 480,
             facingMode: "environment", // вибір тилової камери
             deviceId:
-              "e8901f74866f821db235ea2907f2691e017fb990b324707b4f803bc3d545281d",
+              "e50a135e883ac85ff6307e1efa2c90a15d65f60f2b6ea1eb47dfcd5006f6dc14", // e8901f74866f821db235ea2907f2691e017fb990b324707b4f803bc3d545281d e50a135e883ac85ff6307e1efa2c90a15d65f60f2b6ea1eb47dfcd5006f6dc14
           },
           area: {
             top: "0%",
@@ -46,9 +46,9 @@ function App() {
       function (err) {
         if (err) {
           console.error(err);
-          // setError(err);
           return;
         }
+
         Quagga.start();
       }
     );
@@ -57,6 +57,7 @@ function App() {
       // Обробка знайденого штрихкоду
       // setBarcode(result.codeResult.code);
       addBarcode(result.codeResult.code);
+      // Quagga.stop();
     });
 
     return () => {
@@ -72,6 +73,14 @@ function App() {
           <BarcodeItem key={idx}>{barcode}</BarcodeItem>
         ))}
       </ul>
+      {/* <ul className="barcode-list" style={{ display: "block" }}>
+        {devices.map((device, idx) => (
+          <BarcodeItem key={idx}>
+            <p>{device.deviceId}</p>
+            <p>{device.label}</p>
+          </BarcodeItem>
+        ))}
+      </ul> */}
     </div>
   );
 }
