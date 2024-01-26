@@ -53,6 +53,8 @@ function App() {
       }
     );
 
+    // Quagga.onProcessed((res) => console.log("scanning... ", res));
+
     Quagga.onDetected((result) => {
       // Обробка знайденого штрихкоду
       // setBarcode(result.codeResult.code);
